@@ -1,2 +1,2 @@
-# Pomodoro
+# Pomodoro App
 Pomodoro technique app
