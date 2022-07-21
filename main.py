@@ -1,4 +1,3 @@
-import tkinter.messagebox
 from tkinter import *
 from playsound import playsound
 
@@ -19,29 +18,22 @@ timer = ""
 # ---------------------------- TIMER RESET ------------------------------- # 
 def reset_timer():
     global reps
-    root.after_cancel(timer)
-    canvas.itemconfig(timer_text, text="00:00")
-    timer_label.config(text="Timer", fg=GREEN)
-    checkmark_label.config(text="")
-    reps = 0
+    try:
+        root.after_cancel(timer)
+        canvas.itemconfig(timer_text, text="00:00")
+        timer_label.config(text="Timer", fg=GREEN)
+        checkmark_label.config(text="")
+        reps = 0
+        start_button.config(state=NORMAL)
+    except ValueError:
+        pass
 
 
 # ---------------------------- TIMER MECHANISM ------------------------------- #
-# Starts timer for the first time after start button is clicked
-# and prevents subsequent clicks of start button from affecting the ongoing timer
-def start_timer_first():
-    global reps
-
-    if reps:
-        tkinter.messagebox.showwarning(title="Already running", message="Timer already started")
-        return
-
-    start_timer()
-
-
 def start_timer():
     global reps
     reps += 1
+    start_button.config(state=DISABLED)
 
     work_seconds = int(WORK_MIN * 60)
     short_break_seconds = int(SHORT_BREAK_MIN * 60)
@@ -79,8 +71,6 @@ def count_down(count):
             if reps % 2 == 0:
                 checkmark_label.config(text=CHECK_MARK * (reps // 2))
         else:
-            print(reps // 2)
-            print("Hi")
             reset_timer()
 
 
@@ -98,7 +88,7 @@ canvas.grid(column=1, row=1)
 timer_label = Label(text="Timer", bg=YELLOW, fg=GREEN, font=(FONT_NAME, 40, "bold"))
 timer_label.grid(column=1, row=0)
 
-start_button = Button(text="Start", command=start_timer_first)
+start_button = Button(text="Start", command=start_timer)
 start_button.grid(column=0, row=2)
 
 reset_button = Button(text="Reset", command=reset_timer)
